@@ -6,12 +6,21 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-app.use(require('./Routes'));
+
+// app.use(require('./Routes'));
 
 mongoose.set('debug', true);
+
+mongoose.connect(
+    process.env.MONGODB_URI || 'mongodb://localhost/dogwalkers',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  );
 
 
 db.once('open', () => {
