@@ -1,5 +1,5 @@
 const {Schema, model } = require('mongoose');
-
+const bcrypt = require('bcrypt');
 
 
 const OwnerSchema = new Schema (
@@ -37,11 +37,22 @@ const OwnerSchema = new Schema (
         password: {
             type: String,
             required: true,
-            // match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'Please enter minimum eight characters, at least one uppercase letter, one lowercase letter and one number']
+            match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'Please enter minimum eight characters, at least one uppercase letter, one lowercase letter and one number']
         },
      }
 );
 
+OwnerSchema.pre('save', async function(next) {
+    if(this.isNew || this.isModified('password')){
+        const saltRounds = 10;
+        this.password = await bcrypt.hash(this.password, saltRounds);
+    }
+    next();
+});
+
+OwnerSchema.methods.isCorrectPassword = async function (password) {
+    return bcrypt.compare(password, this.password);
+};
 
 const owner = model('Owner', OwnerSchema);
 
