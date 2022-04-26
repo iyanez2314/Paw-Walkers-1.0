@@ -1,5 +1,6 @@
-const {Schema, model } = require('mongoose');
+const {Schema, model, Types } = require('mongoose');
 const bcrypt = require('bcrypt');
+
 
 
 const OwnerSchema = new Schema (
@@ -39,6 +40,13 @@ const OwnerSchema = new Schema (
             required: true,
             match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'Please enter minimum eight characters, at least one uppercase letter, one lowercase letter and one number']
         },
+
+        dogsOwned: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Dog'
+            }
+        ]
      }
 );
 

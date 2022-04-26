@@ -4,6 +4,10 @@ const ownerControllers = {
     // Get all users
     getAllOwner(req, res) {
         owner.find({})
+        .populate({
+            path: 'Dog',
+            select: '-__v'
+        })
         .then(dbUserData => res.json(dbUserData))
         .catch(err => {
             console.log(err);
