@@ -32,7 +32,11 @@ const dogControllers = {
     // create dog
     createDog({ body }, res) {
        dog.create(body)
-       .then(dbDogData => res.json(dbDogData)) 
+       .then(dbDogData => res.json(dbDogData))
+       .catch(err => {
+           console.log(err)
+           res.status(400).json(err)
+       })
     },
 
     // delete dog 
